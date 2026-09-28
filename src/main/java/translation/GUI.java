@@ -2,6 +2,7 @@ package translation;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.List;
 
 
 // TODO Task D: Update the GUI for the program to align with UI shown in the README example.
@@ -13,12 +14,37 @@ public class GUI {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
+
+            // Step one done below
+            Translator translator = new JSONTranslator();
+            CountryCodeConverter countryConverter = new CountryCodeConverter();
+            LanguageCodeConverter languageConverter = new LanguageCodeConverter();
+            // End of step one
+
+            // Step two
             JPanel countryPanel = new JPanel();
-            JTextField countryField = new JTextField(10);
-            countryField.setText("can");
-            countryField.setEditable(false); // we only support the "can" country code for now
             countryPanel.add(new JLabel("Country:"));
-            countryPanel.add(countryField);
+
+            List<String> countryCodes = translator.getCountryCodes();
+            String[] countryNames = new String[countryCodes.size()];
+
+            for (int i = 0; i < countryCodes.size(); i++) {
+                countryNames[i] = countryConverter.fromCountryCode(countryCodes.get(i));
+            }
+
+            JList<String> countryList = new JList<>(countryNames);
+            JScrollPane countryScrollPane = new JScrollPane(countryList);
+
+            countryPanel.add(countryScrollPane);
+            // End of step two
+
+            //Old code below
+//            JPanel countryPanel = new JPanel();
+//            JTextField countryField = new JTextField(10);
+//            countryField.setText("can");
+//            countryField.setEditable(false); // we only support the "can" country code for now
+//            countryPanel.add(new JLabel("Country:"));
+//            countryPanel.add(countryField);
 
             JPanel languagePanel = new JPanel();
             JTextField languageField = new JTextField(10);
